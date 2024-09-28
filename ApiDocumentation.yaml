@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: Inventory Management API
+  description: API for managing products and user authentication in an inventory system.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api/v1
+
+paths:
+  /register:
+    post:
+      summary: User Registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 6
+                fullName:
+                  type: string
+              required:
+                - email
+                - password
+                - fullName
+      responses:
+        "201":
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        format: email
+                      fullName:
+                        type: string
+        "400":
+          description: Bad request
+        "409":
+          description: User already exists
+
+  /login:
+    post:
+      summary: User Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        format: email
+                      fullName:
+                        type: string
+        "400":
+          description: Invalid credentials
+
+  /admin/products:
+    get:
+      summary: Get all products for review
+      responses:
+        "200":
+          description: Successfully retrieved products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    price:
+                      type: number
+                    quantity:
+                      type: number
+                    status:
+                      type: string
+        "401":
+          description: Unauthorized
+
+  /admin/products/{id}/approve:
+    post:
+      summary: Approve a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to approve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product approved successfully
+        "404":
+          description: Product not found
+
+  /admin/products/{id}/reject:
+    post:
+      summary: Reject a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to reject
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product rejected successfully
+        "404":
+          description: Product not found
+
+  /products:
+    get:
+      summary: List all approved products
+      responses:
+        "200":
+          description: Successfully retrieved approved products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    price:
+                      type: number
+                    quantity:
+                      type: number
+                    status:
+                      type: string
+
+  /admin/products/{id}/publish:
+    post:
+      summary: Publish an approved product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to publish
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product published successfully
+        "404":
+          description: Product not found
+        "400":
+          description: Product must be approved before publishing
