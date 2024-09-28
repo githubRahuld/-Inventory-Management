@@ -61,7 +61,7 @@ The **Inventory Management API** is a backend system designed to facilitate prod
 
 ## Usage
 
-- The API runs on `http://localhost:3000`.
+- The API runs on `http://localhost:8000`.
 - Use tools like Postman or CURL to interact with the API endpoints.
 
 ### Example Endpoints:
