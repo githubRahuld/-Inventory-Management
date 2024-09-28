@@ -24,7 +24,9 @@ import userRouter from "./routes/user.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import productRouter from "./routes/product.routes.js";
 
-app.use("/").get("Welcome to Inventory-management-Sys");
+app.get("/", (req, res) => {
+  res.send("Welcome to Inventory Management System");
+});
 app.use("/users", userRouter);
 app.use("/admins", adminRouter);
 app.use("/products", productRouter);
